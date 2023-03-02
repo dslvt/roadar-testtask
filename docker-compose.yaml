@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+    redis:
+        image: redislabs/redismod
+        volumes:
+          - $PWD/data:/data
+        command: --dir /data --loadmodule /usr/lib/redis/modules/redistimeseries.so
+
+    controller:
+        # restart: always
+        command: 'uvicorn controller:app --host 0.0.0.0'
+        build: .
+        depends_on:
+            - redis
+    
+    sensor:
+        restart: always
+        build: .
+        depends_on:
+            - controller
+        # replicas: 6
+        command: 'python sensor.py'
+    
+    manipulator:
+        restart: always
+        build: .
+        depends_on:
+            - controller
+        command: 'python manipulator.py'
