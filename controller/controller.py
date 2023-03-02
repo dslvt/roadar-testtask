@@ -136,8 +136,7 @@ async def get_sum_data(websocket: WebSocket, keys: Keys = Depends(make_keys)):
         data = json.dumps({'datetime': str(dt), 'status': status})
             
         await websocket.send_text(str(data))
-        # await asyncio.sleep(5)
-        await asyncio.sleep(1)
+        await asyncio.sleep(5)
     
 
 
